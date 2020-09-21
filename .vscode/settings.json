@@ -1,0 +1,6 @@
+{
+  "editor.formatOnType": true,
+  "editor.formatOnSave": true,
+  "C_Cpp.intelliSenseEngine": "Tag Parser",
+  "C_Cpp.clang_format_style": "Google"
+}
