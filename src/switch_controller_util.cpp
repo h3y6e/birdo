@@ -7,21 +7,21 @@
 #include "switch_controller_util.h"
 
 // ボタンを押してから離すまでの時間など (ミリ秒)
-const uint16_t DEFAULT_DELAY_MSEC = 100;
+const uint16_t DEFAULT_DELAY = 100;
 
 /**
  * @brief Switchコントローラーのボタンを押す
  *
  * @param button 押すボタン
- * @param wait_msec 待ち時間 (ミリ秒)
+ * @param wait_time 待ち時間 (ミリ秒)
  * @param loop_count ボタンを押す回数 デフォルト値は1
  */
-void pushButton(Button button, int wait_msec, int loop_count) {
+void pushButton(Button button, int wait_time, int loop_count) {
   for (int i = 0; i < loop_count; i++) {
     SwitchController().pressButton(button);
-    delay(DEFAULT_DELAY_MSEC);
+    delay(DEFAULT_DELAY);
     SwitchController().releaseButton(button);
-    delay(wait_msec);
+    delay(wait_time);
   }
 }
 
@@ -29,17 +29,16 @@ void pushButton(Button button, int wait_msec, int loop_count) {
  * @brief Switchコントローラーの十字ボタンを押す
  *
  * @param button 押す十字ボタン
- * @param wait_msec 待ち時間 (ミリ秒)
- * @param pushing_time_msec ボタンを押す時間の長さ (ミリ秒) デフォルト値は100
+ * @param wait_time 待ち時間 (ミリ秒)
+ * @param pushing_time ボタンを押す時間の長さ (ミリ秒) デフォルト値は100
  * @param loop_count 十字ボタンを押す回数 デフォルト値は1
  */
-void pushDpad(Dpad button, int wait_msec, int pushing_time_msec,
-              int loop_count) {
+void pushDpad(Dpad button, int wait_time, int pushing_time, int loop_count) {
   for (int i = 0; i < loop_count; i++) {
     SwitchController().pressDpad(button);
-    delay(pushing_time_msec);
+    delay(pushing_time);
     SwitchController().releaseDpad();
-    delay(wait_msec);
+    delay(wait_time);
   }
 }
 
@@ -50,13 +49,13 @@ void pushDpad(Dpad button, int wait_msec, int pushing_time_msec,
  * @param ly LスティックのY方向変位 [％] -100 ~ 100 の範囲で設定
  * @param rx RスティックのX方向変位 [％] -100 ~ 100 の範囲で設定
  * @param ry RスティックのY方向変位 [％] -100 ~ 100 の範囲で設定
- * @param tilting_time_msec スティックを傾ける時間
+ * @param tilting_time スティックを傾ける時間
  */
-void tiltJoystick(int lx, int ly, int rx, int ry, int tilting_time_msec) {
+void tiltJoystick(int lx, int ly, int rx, int ry, int tilting_time) {
   SwitchController().setStickTiltRatio(lx, ly, rx, ry);
-  delay(tilting_time_msec);
+  delay(tilting_time);
   SwitchController().setStickTiltRatio(0, 0, 0, 0);
-  delay(DEFAULT_DELAY_MSEC);
+  delay(DEFAULT_DELAY);
 }
 
 /**
@@ -64,13 +63,13 @@ void tiltJoystick(int lx, int ly, int rx, int ry, int tilting_time_msec) {
  *
  * @param lx LスティックのX方向変位 [％] -100 ~ 100 の範囲で設定
  * @param ly LスティックのY方向変位 [％] -100 ~ 100 の範囲で設定
- * @param tilting_time_msec スティックを傾ける時間
+ * @param tilting_time スティックを傾ける時間
  */
-void tiltLeftJoystick(int lx, int ly, int tilting_time_msec) {
+void tiltLeftJoystick(int lx, int ly, int tilting_time) {
   SwitchController().setStickTiltRatio(lx, ly, 0, 0);
-  delay(tilting_time_msec);
+  delay(tilting_time);
   SwitchController().setStickTiltRatio(0, 0, 0, 0);
-  delay(DEFAULT_DELAY_MSEC);
+  delay(DEFAULT_DELAY);
 }
 
 /**
@@ -78,13 +77,13 @@ void tiltLeftJoystick(int lx, int ly, int tilting_time_msec) {
  *
  * @param rx RスティックのX方向変位 [％] -100 ~ 100 の範囲で設定
  * @param ry RスティックのY方向変位 [％] -100 ~ 100 の範囲で設定
- * @param tilting_time_msec スティックを傾ける時間
+ * @param tilting_time スティックを傾ける時間
  */
-void tiltRightJoystick(int rx, int ry, int tilting_time_msec) {
+void tiltRightJoystick(int rx, int ry, int tilting_time) {
   SwitchController().setStickTiltRatio(0, 0, rx, ry);
-  delay(tilting_time_msec);
+  delay(tilting_time);
   SwitchController().setStickTiltRatio(0, 0, 0, 0);
-  delay(DEFAULT_DELAY_MSEC);
+  delay(DEFAULT_DELAY);
 }
 
 /**
@@ -95,19 +94,19 @@ void tiltRightJoystick(int rx, int ry, int tilting_time_msec) {
  * @param rx RスティックのX方向変位 [％] -100 ~ 100 の範囲で設定
  * @param ry RスティックのY方向変位 [％] -100 ~ 100 の範囲で設定
  * @param button 同時に押すボタン
- * @param tilting_time_msec スティックを傾ける時間 (ミリ秒)
+ * @param tilting_time スティックを傾ける時間 (ミリ秒)
  */
 void tiltJoystickAsMashButton(int lx, int ly, int rx, int ry, Button button,
-                              int tilting_time_msec) {
+                              int tilting_time) {
   SwitchController().setStickTiltRatio(lx, ly, rx, ry);
-  for (int i = 0; i < tilting_time_msec / DEFAULT_DELAY_MSEC; i++) {
+  for (int i = 0; i < tilting_time / DEFAULT_DELAY; i++) {
     SwitchController().pressButton(button);
-    delay(DEFAULT_DELAY_MSEC / 2);
+    delay(DEFAULT_DELAY / 2);
     SwitchController().releaseButton(button);
-    delay(DEFAULT_DELAY_MSEC / 2);
+    delay(DEFAULT_DELAY / 2);
   }
   SwitchController().setStickTiltRatio(0, 0, 0, 0);
-  delay(DEFAULT_DELAY_MSEC);
+  delay(DEFAULT_DELAY);
 }
 
 /**
@@ -116,19 +115,19 @@ void tiltJoystickAsMashButton(int lx, int ly, int rx, int ry, Button button,
  * @param lx LスティックのX方向変位 [％] -100 ~ 100 の範囲で設定
  * @param ly LスティックのY方向変位 [％] -100 ~ 100 の範囲で設定
  * @param button 同時に押すボタン
- * @param tilting_time_msec スティックを傾ける時間 (ミリ秒)
+ * @param tilting_time スティックを傾ける時間 (ミリ秒)
  */
 void tiltLeftJoystickAsMashButton(int lx, int ly, Button button,
-                                  int tilting_time_msec) {
+                                  int tilting_time) {
   SwitchController().setStickTiltRatio(lx, ly, 0, 0);
-  for (int i = 0; i < tilting_time_msec / DEFAULT_DELAY_MSEC; i++) {
+  for (int i = 0; i < tilting_time / DEFAULT_DELAY; i++) {
     SwitchController().pressButton(button);
-    delay(DEFAULT_DELAY_MSEC / 2);
+    delay(DEFAULT_DELAY / 2);
     SwitchController().releaseButton(button);
-    delay(DEFAULT_DELAY_MSEC / 2);
+    delay(DEFAULT_DELAY / 2);
   }
   SwitchController().setStickTiltRatio(0, 0, 0, 0);
-  delay(DEFAULT_DELAY_MSEC);
+  delay(DEFAULT_DELAY);
 }
 
 /**
@@ -137,19 +136,19 @@ void tiltLeftJoystickAsMashButton(int lx, int ly, Button button,
  * @param rx RスティックのX方向変位 [％] -100 ~ 100 の範囲で設定
  * @param ry RスティックのY方向変位 [％] -100 ~ 100 の範囲で設定
  * @param button 同時に押すボタン
- * @param tilting_time_msec スティックを傾ける時間 (ミリ秒)
+ * @param tilting_time スティックを傾ける時間 (ミリ秒)
  */
 void tiltRightJoystickAsMashButton(int rx, int ry, Button button,
-                                   int tilting_time_msec) {
+                                   int tilting_time) {
   SwitchController().setStickTiltRatio(0, 0, rx, ry);
-  for (int i = 0; i < tilting_time_msec / DEFAULT_DELAY_MSEC; i++) {
+  for (int i = 0; i < tilting_time / DEFAULT_DELAY; i++) {
     SwitchController().pressButton(button);
-    delay(DEFAULT_DELAY_MSEC / 2);
+    delay(DEFAULT_DELAY / 2);
     SwitchController().releaseButton(button);
-    delay(DEFAULT_DELAY_MSEC / 2);
+    delay(DEFAULT_DELAY / 2);
   }
   SwitchController().setStickTiltRatio(0, 0, 0, 0);
-  delay(DEFAULT_DELAY_MSEC);
+  delay(DEFAULT_DELAY);
 }
 
 /**
@@ -160,8 +159,8 @@ void tiltRightJoystickAsMashButton(int rx, int ry, Button button,
 void flash(int count) {
   for (int i = 0; i < count; i++) {
     RXLED1;
-    delay(DEFAULT_DELAY_MSEC);
+    delay(DEFAULT_DELAY);
     RXLED0;
-    delay(DEFAULT_DELAY_MSEC);
+    delay(DEFAULT_DELAY);
   }
 }
