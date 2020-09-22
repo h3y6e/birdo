@@ -159,8 +159,8 @@ void tiltRightJoystickAsMashButton(int rx, int ry, Button button,
 void flash(int count) {
   for (int i = 0; i < count; i++) {
     RXLED1;
-    delay(DEFAULT_DELAY);
+    delay(100);
     RXLED0;
-    delay(DEFAULT_DELAY);
+    delay(100);
   }
 }
