@@ -1,6 +1,6 @@
 /**
  * @file switch_controller_util.cpp
- * @brief Switchコントローラーを操作するための便利な関数群
+ * @brief Switchコントローラーを操作するための関数群
  * @author 5ebec
  * @date 2020-09-18
  */
