@@ -6,12 +6,33 @@
  */
 #include <switch_controller_util.h>
 
-void scrollCaption() {
-  pushButton(Button::B, 600);
-  pushButton(Button::A, 600);
-}
+/**
+ * @brief 暗転時間 (*200ms)
+ */
+const int BLACKOUT_COUNT = 35;
 
-void blackout() { flash(35); }
+/**
+ * @brief ムービー時間 (*200ms)
+ *
+ * @detail
+ * 雪玉の移動に合わせて視点移動が行われる時間。
+ * ピンがある程度停止した後に次のフェーズへと移行するが、
+ * 時間は不安定要素であるため、安定して稼働させる場合は長めに設定すると良い。
+ * サイクル速度を上げたい場合は60、安定させたい場合は80
+ */
+const int MOVIE_COUNT = 70;
+
+/**
+ * @brief 台詞を進める
+ *
+ * @param count 台詞送りの回数
+ */
+void scrollCaption(int count) {
+  for (int i = 0; i < count; i++) {
+    pushButton(Button::B, 600);
+    pushButton(Button::A, 600);
+  }
+}
 
 /* main */
 /**
@@ -26,39 +47,36 @@ void setup() {
   // ボンドに話しかけることができる位置から開始
   pushButton(Button::A, 500);
   // 「若いの! 雪玉ボウル やりたくなっただか? いつでも歓迎だ!」
-  scrollCaption();
   // 「うれしいねぇ！ でも タダじゃないだよ！ 参加料に20ルピー貰うが いいだか?」
-  scrollCaption();
-  // 「どうも ありがとうだ！！ だば 準備するから ちょっと待つだよ...」 (暗転)
-  scrollCaption();
-  blackout();
+  // 「どうも ありがとうだ！！ だば 準備するから ちょっと待つだよ...」
+  // (暗転)
+  scrollCaption(3);
+  flash(BLACKOUT_COUNT);
   // 「それじゃあ この雪玉さ 使っていいから 頑張って ピンを倒すだよ！」
-  scrollCaption();
-  // 「この遊び 雪玉は2回まで転がせるだ！」 (カメラ移動)
-  scrollCaption();
+  // 「この遊び 雪玉は2回まで転がせるだ！」
+  // (カメラ移動)
+  scrollCaption(2);
   flash(5);
   // 「もし一回で ピンを全部倒せたら ストライク！ という プロ級のプレイだ！」
-  scrollCaption();
   // 「んで2回目で ピンを全部倒せたら スペア！ という まあまあなプレイだ！」
-  scrollCaption();
   // 「それじゃ 頑張るだ！！」 (ボンドが移動)
-  scrollCaption();
-  flash(10);
+  scrollCaption(3);
+  flash(11);
 
   /* 投げ */
   // もつ
-  pushButton(Button::A, 1500);
+  pushButton(Button::A, 1300);
   // 移動
   tiltLeftJoystick(100, 10, 1000);
   // 方向調整
   tiltLeftJoystick(-50, -100, 100);
-  // 投げる (カメラ移動)
+  // 投げる
   pushButton(Button::R, 100);
-  flash(60);
+  flash(MOVIE_COUNT);
   // 「おおおっと！ 記録は 10本！！ ストライクってヤツだ！ 輝かしい記録だ！！」
   // (暗転)
-  scrollCaption();
-  blackout();
+  scrollCaption(1);
+  flash(BLACKOUT_COUNT);
 }
 
 /**
@@ -67,19 +85,15 @@ void setup() {
 void loop() {
   /* 会話 */
   // 「若いの！すげぇだな！特別な道具を分けてやるだよ！」
-  scrollCaption();
   // 「と思っただが… 荷物がいっぱいみたいだな？ 代わりに これを受け取るだ！」
-  scrollCaption();
   // *金ルピー*
-  scrollCaption();
   // 「さて もう1回 遊んでいくだか？」
-  scrollCaption();
   // 「うれしいねぇ！ でも タダじゃないだよ！ 参加料に20ルピー貰うが いいだか?」
   // (暗転)
-  scrollCaption();
-  blackout();
+  scrollCaption(5);
+  flash(BLACKOUT_COUNT);
   // 「それじゃ 頑張るだ！！」
-  scrollCaption();
+  scrollCaption(1);
 
   /* 投げ */
   // 持てるところまで移動
@@ -90,11 +104,11 @@ void loop() {
   tiltLeftJoystick(-100, 0, 1500);
   // 方向調整
   tiltLeftJoystick(50, 100, 100);
-  // 投げる (カメラ移動)
+  // 投げる
   pushButton(Button::R, 100);
-  flash(70);
+  flash(MOVIE_COUNT);
   // 「おおおっと！ 記録は 10本！！ ストライクってヤツだ！ 輝かしい記録だ！！」
   // (暗転)
-  scrollCaption();
-  blackout();
+  scrollCaption(1);
+  flash(BLACKOUT_COUNT);
 }
