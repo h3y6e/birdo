@@ -1,6 +1,7 @@
 /**
- * @file hatching_en.ino
+ * @file hatching.ino
  * @brief 5番道路の預かり屋からタマゴを回収→孵化→ボックスに預ける を繰り返す
+ * (英語ROM)
  * @author 5ebec
  * @date 2020-09-18
  * @detail

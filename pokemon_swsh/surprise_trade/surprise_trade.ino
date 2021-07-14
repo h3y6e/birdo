@@ -1,6 +1,6 @@
 /**
- * @file surprise_trade_ja.ino
- * @brief マジカル交換を行う
+ * @file surprise_trade.ino
+ * @brief マジカル交換を行う (日本語ROM)
  * @author 5ebec
  * @date 2020-09-22
  * @detail
