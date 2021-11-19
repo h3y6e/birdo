@@ -40,12 +40,12 @@ void scrollCaption(int count) {
  */
 void setup() {
   /* コントローラー接続 */
-  pushButton(Button::ZL, 100, 10);
+  pushButton(Button::ZL, 100, 12);
   pushButton(Button::A, 1000);
 
   /* 会話 */
   // ボンドに話しかけることができる位置から開始
-  pushButton(Button::A, 500);
+  pushButton(Button::A, 600);
   // 「若いの! 雪玉ボウル やりたくなっただか? いつでも歓迎だ!」
   // 「うれしいねぇ！ でも タダじゃないだよ！ 参加料に20ルピー貰うが いいだか?」
   // 「どうも ありがとうだ！！ だば 準備するから ちょっと待つだよ...」
@@ -56,7 +56,7 @@ void setup() {
   // 「この遊び 雪玉は2回まで転がせるだ！」
   // (カメラ移動)
   scrollCaption(2);
-  flash(5);
+  flash(6);
   // 「もし一回で ピンを全部倒せたら ストライク！ という プロ級のプレイだ！」
   // 「んで2回目で ピンを全部倒せたら スペア！ という まあまあなプレイだ！」
   // 「それじゃ 頑張るだ！！」 (ボンドが移動)
@@ -67,9 +67,9 @@ void setup() {
   // もつ
   pushButton(Button::A, 1300);
   // 移動
-  tiltLeftJoystick(100, 10, 1000);
+  tiltLeftJoystick(100, 5, 1000);
   // 方向調整
-  tiltLeftJoystick(-50, -100, 100);
+  tiltLeftJoystick(-45, -100, 100);
   // 投げる
   pushButton(Button::R, 100);
   flash(MOVIE_COUNT);
@@ -103,7 +103,7 @@ void loop() {
   // 移動
   tiltLeftJoystick(-100, 0, 1500);
   // 方向調整
-  tiltLeftJoystick(50, 100, 100);
+  tiltLeftJoystick(45, 100, 100);
   // 投げる
   pushButton(Button::R, 100);
   flash(MOVIE_COUNT);
