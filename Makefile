@@ -1,7 +1,7 @@
 PORT = /dev/cu.usbmodemHIDGF1
 BOARD = arduino:avr:leonardo
-GAME = zelda_botw
-SKETCH = snowball_bowling
+GAME = pokemon_bdsp
+SKETCH = hatching
 
 build: compile upload
 
