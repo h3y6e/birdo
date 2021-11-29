@@ -11,7 +11,7 @@
  * 1. 「設定」で　話の速さ: 速い, 手持ち/ボックス: 自動で送る, おまかせレポート:
  * しない　になっている
  * 2.
- * メニューで「タウンマップ」が左上隅、「ポケモン」がその右隣にあり、タウンマップにカーソルが当たっている
+ * メニューで「タウンマップ」が左上隅、「ポケモン」がその右隣にある
  * 3. じてんしゃが＋ボタン呼び出しの上側に登録されている
  * 3. ズイタウンにいる
  * 4. 孵化を早める特性(ほのおのからだ等)を持つポケモンが手持ちにいる
@@ -25,41 +25,40 @@
 /**
  * @brief タマゴのサイクル数
  * (5, 10, 15, 20, 25, 30, 35, 40)
- * イーブイ: 4590 steps = [35/2] * 255
+ *
  * @detail
+ * 必要歩数は ⌊EGG_CYCLE / 2⌋ * 255
  * 参考: https://wiki.ポケモン.com/wiki/タマゴのサイクル数
  */
 const int EGG_CYCLE = 35;
 
 /**
- * @brief 孵化に使用できるボックスの数
+ * @brief 孵化に使用するボックスの数
  */
 const int BOX = 3;
 
 /**
- * @brief 初期位置(ズイタウン ポケモンセンター横)に移動する
- *
- * @param in_town ズイタウンにいる場合はtrue、210番道路にいる場合はfalse
- * デフォルト値はtrue
+ * @brief 初期位置(廃人ロード最南)に移動する
  */
-void moveToInit(bool in_town = true) {
+void moveToInit() {
   // メニューを開く
   pushButton(Button::X, 500);
   // 「タウンマップ」を押す
+  tiltLeftJoystick(-100, -100, 1000);
   // マップ画面が開くまで待機
   pushButton(Button::A, 1100);
-  if (!in_town) pushDpad(Dpad::DOWN, 100, 100, 2);
   // ズイタウン を選択する
   pushButton(Button::A, 700);
   // 「はい」を押し、ポケモンセンター前に移動するまで待機
   pushButton(Button::A, 7000);
-  // 初期位置に徒歩で移動
-  tiltLeftJoystick(-100, 0, 580);  // 4歩
+  // 初期位置に移動
+  tiltLeftJoystick(-100, 0, 580);
+  rideBike();
+  tiltLeftJoystick(0, 100, 5300);
 }
 
 /**
  * @brief 自転車に乗る
- *
  */
 void rideBike() {
   pushButton(Button::PLUS, 500);
@@ -69,12 +68,9 @@ void rideBike() {
 /* タマゴ受け取り系 */
 
 /**
- * @brief 初期位置から移動してタマゴを受け取る
+ * @brief タマゴを受け取る
  */
 void getEgg() {
-  // 預かり屋じいさんの所まで徒歩で移動
-  tiltLeftJoystick(0, -100, 1250);
-  tiltLeftJoystick(-100, 0, 850);
   // 話し掛ける
   //
   // おお！　あんたか
@@ -98,8 +94,6 @@ void getEgg() {
   // おお　あんたか！　よく来たな
   // [ポケモン]と [ポケモン]は 元気じゃぞ！
   // 2匹の　仲は まずまずの or それほど　よくない or とっても　よい ようじゃ
-
-  tiltLeftJoystick(100, 0, 840);
 }
 
 /**
@@ -109,15 +103,15 @@ void getEgg() {
  */
 void getEggs(int n) {
   for (int i = 0; i < n; i++) {
-    // 歩数を貯める
-    rideBike();
-    tiltLeftJoystick(0, -100, 5500);
-    tiltLeftJoystick(0, 100, 10400);
-    tiltLeftJoystick(0, -100, 5500);
-    //初期位置に戻る
-    moveToInit();
+    // 預かり屋じいさんの所まで移動
+    tiltLeftJoystick(0, -100, 10400);
+    tiltLeftJoystick(0, 100, 5080);
+    tiltLeftJoystick(-100, 0, 380);
     // タマゴを貰う
     getEgg();
+    // 初期位置に戻る
+    tiltLeftJoystick(100, 0, 900);
+    tiltLeftJoystick(0, 100, 5400);
   }
 }
 
@@ -128,14 +122,9 @@ void getEggs(int n) {
  *
  */
 void roundTrip(int times) {
-  if (times > 0) {
-    tiltLeftJoystick(0, -100, 6000);  // 69歩
-    for (int i = 0; i < times - 1; i++) {
-      tiltLeftJoystick(0, 100, 10400);   // 127歩
-      tiltLeftJoystick(0, -100, 10400);  // 127歩
-    }
-    tiltLeftJoystick(0, 100, 10400);  // 127歩
-    tiltLeftJoystick(0, -100, 5500);  // 58歩
+  for (int i = 0; i < times; i++) {
+    tiltLeftJoystick(0, -100, 10400);  // 127歩
+    tiltLeftJoystick(0, 100, 10400);   // 127歩
   }
 }
 
@@ -143,17 +132,15 @@ void roundTrip(int times) {
  * @brief 孵化
  */
 void hatch() {
-  rideBike();
-  roundTrip((EGG_CYCLE + 1) / 2);
+  roundTrip((EGG_CYCLE + 1) / 2);   // ⌊EGG_CYCLE / 2⌋ * 254歩
+  tiltLeftJoystick(0, -100, 2000);  // 約20歩
   for (int i = 0; i < 5; i++) {
     pushButton(Button::A, 200, 2);
     flash(76);
     pushButton(Button::A, 5000);
   }
-  // 210番道路に行く
-  tiltLeftJoystick(0, -100, 10400);
   // 初期位置に移動
-  moveToInit(false);
+  tiltLeftJoystick(0, 100, 10400);
 }
 
 /* ボックス操作系 */
@@ -197,15 +184,16 @@ void sendToBox(int column) {
   pushDpad(Dpad::DOWN, 100);
   // 手持ちのポケモン5匹を範囲選択する
   pushButton(Button::A, 100);
-  pushDpad(Dpad::DOWN, 100, 100, 4);
+  pushDpad(Dpad::DOWN, 50, 100, 3);
+  pushDpad(Dpad::DOWN, 150);
   // 選択したポケモンを持ち上げる
   pushButton(Button::A, 150);
   // 指定列にポケモンを移動させる
   pushDpad(Dpad::UP, 100);
   if (column < 3) {
-    pushDpad(Dpad::RIGHT, 100, 100, column + 1);
+    pushDpad(Dpad::RIGHT, 50, 100, column + 1);
   } else {
-    pushDpad(Dpad::LEFT, 100, 100, 6 - column);
+    pushDpad(Dpad::LEFT, 50, 100, 6 - column);
   }
   pushButton(Button::A, 150);
 }
@@ -220,17 +208,34 @@ void returnFromBox(int column) {
   pushDpad(Dpad::RIGHT, 150);
   // ポケモン5匹を範囲選択する
   pushButton(Button::A, 100);
-  pushDpad(Dpad::DOWN, 100, 100, 4);
+  pushDpad(Dpad::DOWN, 50, 100, 3);
+  pushDpad(Dpad::DOWN, 150);
   // 選択したポケモンを持ち上げる
   pushButton(Button::A, 150);
   // 手持ちにポケモンを移動する
   pushDpad(Dpad::DOWN, 100);
   if (column < 3) {
-    pushDpad(Dpad::LEFT, 100, 100, column + 1);
+    pushDpad(Dpad::LEFT, 50, 100, column + 1);
   } else {
-    pushDpad(Dpad::RIGHT, 100, 100, 6 - column);
+    pushDpad(Dpad::RIGHT, 50, 100, 6 - column);
   }
   pushButton(Button::A, 500);
+}
+
+/**
+ * @brief ボックスを入れ替える
+ *
+ * @param box 何個目のボックスをボックス1と入れ替えるか
+ */
+void swapBox(int box) {
+  // ボックス一覧
+  pushDpad(Dpad::UP, 150);
+  pushDpad(Dpad::UP, 100);
+  pushButton(Button::A, 300);
+  pushButton(Button::Y, 150);
+  pushDpad(Dpad::RIGHT, 50, 100, box - 1);
+  pushButton(Y, 100);
+  pushButton(B, 150);
 }
 
 /* main */
@@ -241,30 +246,36 @@ void setup() {
   // 初期位置
   moveToInit();
 
-  // タマゴを受け取る
-  getEggs(30);
+  for (int box = 1; box < BOX; box++) {
+    // タマゴを受け取る
+    getEggs(30);
 
-  // ボックスを開き、手持ちの5匹を左のボックスの5列目に預ける
-  openBox();
-  pushButton(Button::L, 500);
-  sendToBox(5);
-
-  // 元のボックスに戻り0列目を手持ちに入れる
-  pushButton(Button::R, 700);
-  pushDpad(Dpad::RIGHT, 200);
-  returnFromBox(0);
-  closeBox();
-  moveToInit();
-
-  for (int column = 0; column < 6; column++) {
-    // タマゴを孵す
-    hatch();
-
-    // 手持ちを入れ替える
+    // ボックスを開き、手持ちの5匹を左のボックスの5列目に預ける
     openBox();
-    sendToBox(column);
-    if (column != 5) returnFromBox(column + 1);
+    pushButton(Button::L, 700);
+    sendToBox(5);
+
+    // 元のボックスに戻り0列目を手持ちに入れる
+    pushButton(Button::R, 700);
+    pushDpad(Dpad::RIGHT, 200);
+    returnFromBox(0);
     closeBox();
+
+    for (int column = 0; column < 6; column++) {
+      // タマゴを孵す
+      hatch();
+
+      openBox();
+      if (column < 5) {
+        // 手持ちを入れ替える
+        sendToBox(column);
+        returnFromBox(column + 1);
+      } else {
+        // ボックスを入れ替える
+        if (BOX > 1) swapBox(box + 1);
+      }
+      closeBox();
+    }
   }
 }
 
