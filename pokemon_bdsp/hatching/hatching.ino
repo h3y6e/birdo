@@ -15,10 +15,9 @@
  * 3. じてんしゃが＋ボタン呼び出しの上側に登録されている
  * 3. ズイタウンにいる
  * 4. 孵化を早める特性(ほのおのからだ等)を持つポケモンが手持ちにいる
- * 5.
- * ボックス1(ボックス一覧で左上隅のボックス)から指定したボックスまでが空で、かつボックス18の6列目が空いている
+ * 5.最初のボックス(ボックス一覧で左上隅のボックス)から指定したボックスまでが空で、
+ * かつ最後のボックス(ボックス一覧で右下隅のボックス)の5列目が空いている
  * 6. じてんしゃに乗っており、ギアが4速である
- *
  */
 #include <switch_controller_util.h>
 
@@ -27,7 +26,7 @@
  * (5, 10, 15, 20, 25, 30, 35, 40)
  *
  * @details
- * 必要歩数は ⌊EGG_CYCLE / 2⌋ * 255
+ * 必要歩数は ⌈EGG_CYCLE / 2⌉ * 255
  * 参考: https://wiki.ポケモン.com/wiki/タマゴのサイクル数
  */
 const int EGG_CYCLE = 35;
@@ -81,15 +80,15 @@ void rideBike() {
  *   [はい]
  *   へいほぅは　預かり屋　じいさんから　
  *   タマゴを　もらった！
- *   「タマゴを ボックスへ　送信しました！」
+ *   「タマゴを　ボックスへ　送信しました！」
  *   大事に　育てなさいよ！
  *
  * タマゴ未出現時:　A/Bボタン4回で終了
  *   おお　あんたか！　よく来たな
  *   [ポケモン]と　[ポケモン]は　元気じゃぞ！
- *   2匹の　仲は とっても 良いようじゃ or まずまずの　ようじゃ or
- * それほど　良くないがなぁ
- *
+ *   2匹の　仲は とっても 良いようじゃ
+ *         or まずまずの　ようじゃ
+ *         or それほど　良くないがなぁ
  */
 void getEgg() {
   // 話し掛ける
@@ -120,11 +119,12 @@ void getEggs(int n) {
   }
 }
 
+/* タマゴサイクル消費系 */
+
 /**
  * @brief 初期位置から自転車で廃人ロードを往復する (1往復254歩)
  *
  * @param times 往復回数
- *
  */
 void roundTrip(int times) {
   for (int i = 0; i < times; i++) {
@@ -208,8 +208,6 @@ void sendToBox(int column) {
  * @param column 何列目のポケモンを戻すか
  */
 void returnFromBox(int column) {
-  // 隣列にカーソルを移動させる
-  pushDpad(RIGHT, 150);
   // ポケモン5匹を範囲選択する
   pushButton(A, 100);
   pushDpad(DOWN, 50, 100, 3);
@@ -223,7 +221,7 @@ void returnFromBox(int column) {
   } else {
     pushDpad(RIGHT, 50, 100, 6 - column);
   }
-  pushButton(A, 500);
+  pushButton(A, 600);
 }
 
 /**
@@ -235,7 +233,8 @@ void swapBox(int box) {
   // ボックス一覧
   pushDpad(UP, 150);
   pushDpad(UP, 100);
-  pushButton(A, 400);
+  pushDpad(LEFT, 100);
+  pushButton(A, 500);
   // 1番目と2番目を入れ替え
   pushButton(Y, 100);
   pushDpad(RIGHT, 50);
@@ -266,22 +265,14 @@ void setup() {
     // タマゴを受け取る
     getEggs(30);
 
-    // ボックスを開き、手持ちの5匹を隣のボックスの5列目に預ける
+    // ボックスを開き、手持ちの5匹を左隣のボックスの5列目に預ける
     openBox();
-    if (box == 1) {
-      pushButton(L, 700);
-    } else {
-      pushButton(R, 700);
-    }
+    pushButton(L, 700);
     sendToBox(5);
 
     // 元のボックスに戻り0列目を手持ちに入れる
-    if (box == 1) {
-      pushButton(R, 700);
-    } else {
-      pushButton(L, 700);
-    }
-    pushDpad(RIGHT, 200);
+    pushButton(R, 700);
+    pushDpad(RIGHT, 150, 100, 2);
     returnFromBox(0);
     closeBox();
 
@@ -289,15 +280,22 @@ void setup() {
       // タマゴを孵す
       hatch();
 
-      // ボックス操作
+      // 手持ちを入れ替える
       openBox();
+      sendToBox(column);
       if (column < 5) {
-        // 手持ちを入れ替える
-        sendToBox(column);
+        // 隣列にカーソルを移動させる
+        pushDpad(RIGHT, 150);
         returnFromBox(column + 1);
       } else {
         // ボックスを入れ替える
         if (BOX > 1) swapBox(box + 1);
+        // 隣のボックスの5列目を手持ちに入れる
+        pushButton(L, 700);
+        pushDpad(DOWN, 100, 100, 2);
+        pushDpad(LEFT, 100, 100, 2);
+        returnFromBox(5);
+        pushButton(R, 700);
       }
       closeBox();
 
