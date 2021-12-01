@@ -4,7 +4,7 @@
  * (英語ROM)
  * @author 5ebec
  * @date 2020-09-18
- * @detail
+ * @details
  * 初期条件:
  * 0. 丸いお守りを手にいれておく
  *    ロトム自転車を最大まで強化しておく
@@ -25,7 +25,7 @@
  * @brief タマゴのサイクル数
  * (5, 10, 15, 20, 25, 30, 35, 40)
  *
- * @detail
+ * @details
  * 参考: https://wiki.ポケモン.com/wiki/タマゴのサイクル数
  */
 const int EGG_CYCLE = 35;
@@ -40,16 +40,16 @@ const int BOX = 3;
  */
 void moveToInit() {
   // メニューを開く
-  pushButton(Button::X, 400);
+  pushButton(X, 400);
   // "TOWN MAP"を押す
   // マップ画面が開くまで待機
-  pushButton(Button::A, 2400);
+  pushButton(A, 2400);
   // ジュンヤのキャンプ前 から 預かり屋の前 へ移動する
   tiltLeftJoystick(20, -20, 200);
   // 預かり屋の前を選択し，「はい」を押す
-  pushButton(Button::A, 700);
+  pushButton(A, 700);
   // 初期位置に移動するまで待機
-  pushButton(Button::A, 2200);
+  pushButton(A, 2200);
 }
 
 /* タマゴ受け取り系 */
@@ -59,22 +59,22 @@ void moveToInit() {
  */
 void getEgg() {
   // 初期位置から預かり屋さんのところまで移動する
-  pushButton(Button::PLUS, 500);
+  pushButton(PLUS, 500);
   tiltLeftJoystick(-100, -60, 600);
 
   // 預かり屋さんからタマゴを貰う
   // `A` -> "We found your Pokémon holding an Egg. Would you like to take it?"
   // `A` -> "Yes"
-  pushButton(Button::A, 900, 2);
+  pushButton(A, 900, 2);
   // その後はB連打
   // *You received an Egg from the Nursery worker!*
   // *The Egg has been added to your party.*
   // OR *The Egg has been sent to a Box!*
   // "Take good care of it, and raise it well."
-  pushButton(Button::B, 200, 18);
+  pushButton(B, 200, 18);
   // 初期位置に戻る
   tiltLeftJoystick(100, 50, 500);
-  pushButton(Button::PLUS, 500);
+  pushButton(PLUS, 500);
 }
 
 /**
@@ -102,7 +102,7 @@ void getEggs(int n) {
  *
  * @param running_time 走行時間 (秒)
  *
- * @detail
+ * @details
  * 初期位置から橋の右端まで行くのには約14.5秒かかる
  * ターボは開放後約6.5秒後に再び使えるようになる
  *
@@ -114,8 +114,7 @@ void rideToRight(float running_time) {
     // ターボが溜まるまで右に進む
     tiltLeftJoystick(100, 0, 3500);
     // ターボを開放し右に進む
-    tiltLeftJoystickAsMashButton(100, 0, Button::R,
-                                 (running_time - 3.5) * 1000);
+    tiltLeftJoystickAsMashButton(100, 0, R, (running_time - 3.5) * 1000);
   }
 }
 
@@ -135,10 +134,10 @@ void roundTrip(float running_time) {
       break;
     }
     if (running_time >= 7.7) {
-      tiltLeftJoystickAsMashButton(i * 100, 0, Button::R, 7700);
+      tiltLeftJoystickAsMashButton(i * 100, 0, R, 7700);
       running_time -= 7.7;
     } else {
-      tiltLeftJoystickAsMashButton(i * 100, 0, Button::R, running_time * 1000);
+      tiltLeftJoystickAsMashButton(i * 100, 0, R, running_time * 1000);
       break;
     }
     i *= -1;
@@ -152,12 +151,12 @@ void roundTrip(float running_time) {
  */
 void openBox() {
   // メニューを開く
-  pushButton(Button::X, 400);
+  pushButton(X, 400);
   // "POKÉMON"にカーソルを合わせて開く
-  pushDpad(Dpad::RIGHT, 100);
-  pushButton(Button::A, 1200);
+  pushDpad(RIGHT, 100);
+  pushButton(A, 1200);
   // ボックスを開く
-  pushButton(Button::R, 1400);
+  pushButton(R, 1400);
 }
 
 /**
@@ -165,10 +164,10 @@ void openBox() {
  */
 void closeBox() {
   // メニューに戻る
-  pushButton(Button::B, 1200, 2);
+  pushButton(B, 1200, 2);
   // "TOWN MAP"にカーソルを合わせて閉じる
-  pushDpad(Dpad::LEFT, 100);
-  pushButton(Button::B, 500);
+  pushDpad(LEFT, 100);
+  pushButton(B, 500);
 }
 
 /**
@@ -182,23 +181,23 @@ void sendToBox(int column) {
 
   /* 手持ちの孵化したポケモンを範囲選択してボックスの指定列に移す */
   // "Multiselect"モードにする
-  pushButton(Button::Y, 100, 2);
+  pushButton(Y, 100, 2);
   // 孵化したポケモンの1匹目にカーソルを当てる
-  pushDpad(Dpad::LEFT, 100);
-  pushDpad(Dpad::DOWN, 100);
+  pushDpad(LEFT, 100);
+  pushDpad(DOWN, 100);
   // 孵化したポケモン5匹を範囲選択する
-  pushButton(Button::A, 100);
-  pushDpad(Dpad::UP, 100, 100, 2);
+  pushButton(A, 100);
+  pushDpad(UP, 100, 100, 2);
   // 選択したポケモンを持ち上げる
-  pushButton(Button::A, 100);
+  pushButton(A, 100);
   // 指定列にポケモンを移動させる
-  pushDpad(Dpad::UP, 100);
+  pushDpad(UP, 100);
   if (column < 3) {
-    pushDpad(Dpad::RIGHT, 100, 100, column + 1);
+    pushDpad(RIGHT, 100, 100, column + 1);
   } else {
-    pushDpad(Dpad::LEFT, 100, 100, 6 - column);
+    pushDpad(LEFT, 100, 100, 6 - column);
   }
-  pushButton(Button::A, 100);
+  pushButton(A, 100);
 
   // ボックスを閉じる
   closeBox();
@@ -214,26 +213,26 @@ void returnFromBox(int column) {
   openBox();
 
   // "Multiselect"モードにする
-  pushButton(Button::Y, 100, 2);
+  pushButton(Y, 100, 2);
   // 指定列にカーソルを移動させる
   if (column < 4) {
-    pushDpad(Dpad::RIGHT, 100, 100, column);
+    pushDpad(RIGHT, 100, 100, column);
   } else {
-    pushDpad(Dpad::LEFT, 100, 100, 7 - column);
+    pushDpad(LEFT, 100, 100, 7 - column);
   }
   // ポケモン5匹を範囲選択する
-  pushButton(Button::A, 100);
-  pushDpad(Dpad::UP, 100);
+  pushButton(A, 100);
+  pushDpad(UP, 100);
   // 選択したポケモンを持ち上げる
-  pushButton(Button::A, 100);
+  pushButton(A, 100);
   // 手持ちにポケモンを移動する
   if (column < 3) {
-    pushDpad(Dpad::LEFT, 100, 100, column + 1);
+    pushDpad(LEFT, 100, 100, column + 1);
   } else {
-    pushDpad(Dpad::RIGHT, 100, 100, 6 - column);
+    pushDpad(RIGHT, 100, 100, 6 - column);
   }
-  pushDpad(Dpad::DOWN, 100);
-  pushButton(Button::A, 100);
+  pushDpad(DOWN, 100);
+  pushButton(A, 100);
 
   // ボックスを閉じる
   closeBox();
@@ -246,7 +245,7 @@ void moveToRightBox() {
   // ボックスを開く
   openBox();
   // 右のボックスに移動
-  pushButton(Button::R, 100);
+  pushButton(R, 100);
   // ボックスを閉じる
   closeBox();
 }
@@ -258,7 +257,7 @@ void moveToLeftBox() {
   // ボックスを開く
   openBox();
   // 右のボックスに移動
-  pushButton(Button::L, 100);
+  pushButton(L, 100);
   // ボックスを閉じる
   closeBox();
 }
@@ -271,13 +270,13 @@ void moveToLeftBox() {
 void setup() {
   /* 初期設定 */
   // Bボタン連打でフィールド画面に戻る
-  pushButton(Button::B, 500, 4);
+  pushButton(B, 500, 4);
   // メニューを開く
-  pushButton(Button::X, 400);
+  pushButton(X, 400);
   // "TOWN MAP"にカーソルをあわせる
-  pushDpad(Dpad::LEFT_UP, 100, 800);
+  pushDpad(LEFT_UP, 100, 800);
   // メニューを閉じる
-  pushButton(Button::B, 500);
+  pushButton(B, 500);
   // 初期位置に移動
   moveToInit();
   // 最初のタマゴを出現させる
@@ -290,36 +289,36 @@ void setup() {
   // ボックスを開く
   openBox();
   // 左のボックスへ移動する
-  pushButton(Button::L, 100);
+  pushButton(L, 100);
   // "Multiselect"モードにする
-  pushButton(Button::Y, 100, 2);
+  pushButton(Y, 100, 2);
   // 預けるポケモンの1匹目にカーソルを当てる
-  pushDpad(Dpad::LEFT, 100);
-  pushDpad(Dpad::DOWN, 100);
+  pushDpad(LEFT, 100);
+  pushDpad(DOWN, 100);
   // 預けるポケモン5匹を範囲選択する
-  pushButton(Button::A, 100);
-  pushDpad(Dpad::UP, 100, 100, 2);
+  pushButton(A, 100);
+  pushDpad(UP, 100, 100, 2);
   // 選択したポケモンを持ち上げる
-  pushButton(Button::A, 100);
+  pushButton(A, 100);
   // 5列目にポケモンを移動させる
-  pushDpad(Dpad::UP, 100);
-  pushDpad(Dpad::LEFT, 100);
-  pushButton(Button::A, 100);
+  pushDpad(UP, 100);
+  pushDpad(LEFT, 100);
+  pushButton(A, 100);
 
   /* 元のボックスに戻り0列目を手持ちに入れる */
   // 右のボックスへ移動する
-  pushButton(Button::R, 100);
+  pushButton(R, 100);
   // 0列目にカーソルを移動させる
-  pushDpad(Dpad::RIGHT, 100, 100, 2);
+  pushDpad(RIGHT, 100, 100, 2);
   // ポケモン5匹を範囲選択する
-  pushButton(Button::A, 100);
-  pushDpad(Dpad::UP, 100);
+  pushButton(A, 100);
+  pushDpad(UP, 100);
   // 選択したポケモンを持ち上げる
-  pushButton(Button::A, 100);
+  pushButton(A, 100);
   // 手持ちにポケモンを移動する
-  pushDpad(Dpad::LEFT, 100);
-  pushDpad(Dpad::DOWN, 100);
-  pushButton(Button::A, 100);
+  pushDpad(LEFT, 100);
+  pushDpad(DOWN, 100);
+  pushButton(A, 100);
   // ボックスを閉じる
   closeBox();
 
@@ -332,10 +331,10 @@ void setup() {
     roundTrip(11 * count);
     for (int i = 0; i < 5; i++) {
       // *Oh?*
-      pushButton(Button::A, 200);
+      pushButton(A, 200);
       // 孵化ムービー
       flash(70);
-      pushButton(Button::B, 200);
+      pushButton(B, 200);
       // 1歩進む
       tiltLeftJoystick(0, -100, 200);
     }
@@ -345,39 +344,39 @@ void setup() {
       // ボックスを開く
       openBox();
       // "Multiselect"モードにする
-      pushButton(Button::Y, 100, 2);
+      pushButton(Y, 100, 2);
       // 孵化したポケモンの1匹目にカーソルを当てる
-      pushDpad(Dpad::LEFT, 100);
-      pushDpad(Dpad::DOWN, 100);
+      pushDpad(LEFT, 100);
+      pushDpad(DOWN, 100);
       // 孵化したポケモン5匹を範囲選択する
-      pushButton(Button::A, 100);
-      pushDpad(Dpad::UP, 100, 100, 2);
+      pushButton(A, 100);
+      pushDpad(UP, 100, 100, 2);
       // 選択したポケモンを持ち上げる
-      pushButton(Button::A, 100);
+      pushButton(A, 100);
       // 指定列にポケモンを移動させる
-      pushDpad(Dpad::UP, 100);
+      pushDpad(UP, 100);
       if (column < 3) {
-        pushDpad(Dpad::RIGHT, 100, 100, column + 1);
+        pushDpad(RIGHT, 100, 100, column + 1);
       } else {
-        pushDpad(Dpad::LEFT, 100, 100, 6 - column);
+        pushDpad(LEFT, 100, 100, 6 - column);
       }
-      pushButton(Button::A, 100);
+      pushButton(A, 100);
 
       // 隣列にカーソルを移動させる
-      pushDpad(Dpad::RIGHT, 100);
+      pushDpad(RIGHT, 100);
       // ポケモン5匹を範囲選択する
-      pushButton(Button::A, 100);
-      pushDpad(Dpad::UP, 100);
+      pushButton(A, 100);
+      pushDpad(UP, 100);
       // 選択したポケモンを持ち上げる
-      pushButton(Button::A, 100);
+      pushButton(A, 100);
       // 手持ちにポケモンを移動する
       if (column < 2) {
-        pushDpad(Dpad::LEFT, 100, 100, column + 2);
+        pushDpad(LEFT, 100, 100, column + 2);
       } else {
-        pushDpad(Dpad::RIGHT, 100, 100, 5 - column);
+        pushDpad(RIGHT, 100, 100, 5 - column);
       }
-      pushDpad(Dpad::DOWN, 100);
-      pushButton(Button::A, 100);
+      pushDpad(DOWN, 100);
+      pushButton(A, 100);
     } else {
       /* column= 5の場合，終了する */
     }

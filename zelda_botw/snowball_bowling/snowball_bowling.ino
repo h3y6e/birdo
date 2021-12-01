@@ -14,7 +14,7 @@ const int BLACKOUT_COUNT = 35;
 /**
  * @brief ムービー時間 (*200ms)
  *
- * @detail
+ * @details
  * 雪玉の移動に合わせて視点移動が行われる時間。
  * ピンがある程度停止した後に次のフェーズへと移行するが、
  * 時間は不安定要素であるため、安定して稼働させる場合は長めに設定すると良い。
@@ -29,8 +29,8 @@ const int MOVIE_COUNT = 70;
  */
 void scrollCaption(int count) {
   for (int i = 0; i < count; i++) {
-    pushButton(Button::B, 600);
-    pushButton(Button::A, 600);
+    pushButton(B, 600);
+    pushButton(A, 600);
   }
 }
 
@@ -40,12 +40,12 @@ void scrollCaption(int count) {
  */
 void setup() {
   /* コントローラー接続 */
-  pushButton(Button::ZL, 100, 12);
-  pushButton(Button::A, 1000);
+  pushButton(ZL, 100, 12);
+  pushButton(A, 1000);
 
   /* 会話 */
   // ボンドに話しかけることができる位置から開始
-  pushButton(Button::A, 600);
+  pushButton(A, 600);
   // 「若いの! 雪玉ボウル やりたくなっただか? いつでも歓迎だ!」
   // 「うれしいねぇ！ でも タダじゃないだよ！ 参加料に20ルピー貰うが いいだか?」
   // 「どうも ありがとうだ！！ だば 準備するから ちょっと待つだよ...」
@@ -65,13 +65,13 @@ void setup() {
 
   /* 投げ */
   // もつ
-  pushButton(Button::A, 1300);
+  pushButton(A, 1300);
   // 移動
   tiltLeftJoystick(100, 5, 1000);
   // 方向調整
   tiltLeftJoystick(-45, -100, 100);
   // 投げる
-  pushButton(Button::R, 100);
+  pushButton(R, 100);
   flash(MOVIE_COUNT);
   // 「おおおっと！ 記録は 10本！！ ストライクってヤツだ！ 輝かしい記録だ！！」
   // (暗転)
@@ -99,13 +99,13 @@ void loop() {
   // 持てるところまで移動
   tiltLeftJoystick(-100, 0, 200);
   // もつ
-  pushButton(Button::A, 1300);
+  pushButton(A, 1300);
   // 移動
   tiltLeftJoystick(-100, 0, 1500);
   // 方向調整
   tiltLeftJoystick(45, 100, 100);
   // 投げる
-  pushButton(Button::R, 100);
+  pushButton(R, 100);
   flash(MOVIE_COUNT);
   // 「おおおっと！ 記録は 10本！！ ストライクってヤツだ！ 輝かしい記録だ！！」
   // (暗転)
