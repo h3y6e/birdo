@@ -38,3 +38,8 @@ $ arduino-cli compile -b arduino:avr:leonardo [sketch/path]
 # upload
 $ arduino-cli upload -p [port] -b arduino:avr:leonardo [sketch/path]
 ```
+
+## LICENSE
+[MIT License](https://github.com/5ebec/birdo/blob/master/LICENSE)
+
+`Birdo` uses modified [`SwitchControlLibrary`](https://github.com/celclow/SwitchControlLibrary)([MIT License](https://github.com/celclow/SwitchControlLibrary/blob/master/LICENSE)).
