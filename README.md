@@ -14,7 +14,7 @@ $ arduino-cli core install arduino:avr
 
 ```sh
 $ cd ~/Documents/Arduino/libraries/
-$ git clone https://github.com/5ebec/birdo
+$ git clone https://github.com/h3y6e/birdo
 ```
 
 3. add `boards.local.txt` file to `arduino/hardware/avr/`
@@ -40,6 +40,6 @@ $ arduino-cli upload -p [port] -b arduino:avr:leonardo [sketch/path]
 ```
 
 ## LICENSE
-[MIT License](https://github.com/5ebec/birdo/blob/master/LICENSE)
+[MIT License](https://github.com/h3y6e/birdo/blob/master/LICENSE)
 
 `Birdo` uses modified [`SwitchControlLibrary`](https://github.com/celclow/SwitchControlLibrary)([MIT License](https://github.com/celclow/SwitchControlLibrary/blob/master/LICENSE)).
