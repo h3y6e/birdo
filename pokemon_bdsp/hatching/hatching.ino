@@ -2,7 +2,7 @@
  * @file hatching.ino
  * @brief 自動孵化装置
  * (日本語ROM)
- * @author 5ebec
+ * @author h3y6e
  * @date 2021-11-19
  * @details
  * 初期条件:
