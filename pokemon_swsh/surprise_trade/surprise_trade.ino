@@ -1,7 +1,7 @@
 /**
  * @file surprise_trade.ino
  * @brief マジカル交換を行う (日本語ROM)
- * @author 5ebec
+ * @author h3y6e
  * @date 2020-09-22
  * @details
  * 初期条件:
