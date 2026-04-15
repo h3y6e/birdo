@@ -1,7 +1,7 @@
 /**
  * @file snowball_bowling.ino
  * @brief ミニゲーム「雪玉ボウル」でストライクを出し続ける
- * @author 5ebec
+ * @author h3y6e
  * @date 2021-07-14
  */
 #include <switch_controller_util.h>
