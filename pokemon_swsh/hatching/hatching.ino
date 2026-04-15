@@ -2,7 +2,7 @@
  * @file hatching.ino
  * @brief 5番道路の預かり屋からタマゴを回収→孵化→ボックスに預ける を繰り返す
  * (英語ROM)
- * @author 5ebec
+ * @author h3y6e
  * @date 2020-09-18
  * @details
  * 初期条件:
